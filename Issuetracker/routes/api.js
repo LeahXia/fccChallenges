@@ -112,17 +112,17 @@ module.exports = function (app) {
           return
         } else {
           updateQuery.updated_on = Date()
-          Project.findByIdAndUpdate(_id, {$set: updateQuery}, (err, originalProject) => {
+          Project.findByIdAndUpdate(_id, {$set: updateQuery}, {new : true}, (err, project) => {
             if (err) {
               console.log('Error', err);
               res.send({error: err})
               return;
-            } else if (!originalProject) {
+            } else if (!project) {
               console.log('No originalProject');
               res.send({error: "No project has been found with this id"})
               return;
             }
-            res.send(req.body);
+            res.send(project);
           })
         }
       })
