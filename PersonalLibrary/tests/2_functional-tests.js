@@ -39,7 +39,6 @@ suite('Functional Tests', function() {
 
   suite('Routing tests', function() {
 
-
     suite('POST /api/books with title => create book object/expect book object', function() {
 
       test('Test POST /api/books with title', function(done) {
@@ -51,6 +50,7 @@ suite('Functional Tests', function() {
           assert.equal(res.body.title, 'Gone Girl')
           assert.isOk(res.body._id)
           savedBookid = res.body._id
+          console.log(savedBookid);
           done();
         })
       });
@@ -86,7 +86,6 @@ suite('Functional Tests', function() {
 
     });
 
-
     suite('GET /api/books/[id] => book object with [id]', function(){
 
       test('Test GET /api/books/[id] with id not in db',  function(done){
@@ -107,6 +106,7 @@ suite('Functional Tests', function() {
           assert.equal(res.body.title, 'Gone Girl')
           assert.isOk(res.body._id)
           assert.property(res.body, 'commentcount', 'book should has commentcount property')
+          assert.isArray(res.body.comments)
           done();
         })
       });
@@ -121,8 +121,6 @@ suite('Functional Tests', function() {
         .post('/api/books/'+savedBookid)
         .send({comment: 'Awesome book!'})
         .end((err, res) => {
-          // console.log('err', err);
-          // console.log('res', res.body);
           assert.equal(res.status, 200)
           assert.isArray(res.body.comments)
           assert.include(res.body.comments, 'Awesome book!')
@@ -133,6 +131,39 @@ suite('Functional Tests', function() {
 
     });
 
-  });
+    // suite('DELETE /api/books => delete all of the books', function(){
+    //   test('Test DELETE /api/books/', function(done) {
+    //     chai.request(server)
+    //     .delete('/api/books/')
+    //     .end((err, res) => {
+    //       assert.equal(res.status, 200);
+    //       assert.equal(res.body.result, 'delete successful')
+    //       done();
+    //     })
+    //   })
+    // })
 
+    // suite('DELETE /api/books/[id] => delete book object with id', function(){
+    //   test('Test DELETE /api/books/[id] with id not in db', function(done){
+    //     chai.request(server)
+    //     .delete('/api/books/833973')
+    //     .end((err,res) => {
+    //       assert.equal(res.status, 200)
+    //       assert.equal(res.body.error, 'no book exists')
+    //       done();
+    //     })
+    //   })
+    //
+    //   test('Test DELETE /api/books/[id] with valid id in db', function(done){
+    //     chai.request(server)
+    //     .delete('/api/books/'+savedBookid)
+    //     .end((err,res) => {
+    //       assert.equal(res.status, 200)
+    //       assert.equal(res.body.result, 'delete successful')
+    //       done()
+    //     })
+    //   })
+    //
+    // })
+  });
 });

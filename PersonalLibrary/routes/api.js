@@ -60,6 +60,13 @@ module.exports = function (app) {
 
     .delete(function(req, res){
       //if successful response will be 'complete delete successful'
+      Book.deleteMany({}, (err, doc) => {
+        if (err) {
+          res.json({error: err})
+          return;
+        }
+        res.json({result: 'delete successful'})
+      })
     });
 
 
@@ -105,8 +112,25 @@ module.exports = function (app) {
     })
 
     .delete(function(req, res){
-      var bookid = req.params.id;
+
+      if (!req.params.id.match(/^[0-9a-fA-F]{24}$/)) {
+        res.json({error: 'no book exists'})
+        return
+      }
+
+      var bookid = new ObjectId(req.params.id);
+
       //if successful response will be 'delete successful'
+
+      Book.deleteOne({_id: bookid}, (err) => {
+        // console.log('doc',bookid, doc.deletedCount);
+        if (err) {
+          res.json({error: 'no book exists'})
+          return
+        }
+
+        res.json({result: 'delete successful'})
+      })
     });
 
 };
